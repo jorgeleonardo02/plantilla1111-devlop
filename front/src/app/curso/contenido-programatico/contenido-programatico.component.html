@@ -1,0 +1,491 @@
+<!-- 6 -->
+<!-- <div class="contenido-container">
+    <h1>{{ blog.titulo }}</h1>
+
+    <form [formGroup]="contenidoForm" (ngSubmit)="crearSeccion()">
+      <label for="contenido">Selecciona un contenido:</label>
+      <select formControlName="opcionSeleccionada" id="contenido" required>
+        <option *ngFor="let contenido of contenidos" [ngValue]="contenido">
+          {{ contenido.titulo }}
+        </option>
+      </select>
+    
+      <label for="nombreSeccion">Nombre de la sección:</label>
+      <input
+        id="nombreSeccion"
+        type="text"
+        formControlName="nombreSeccion"
+        placeholder="Ingrese el nombre de la sección"
+        required
+      />
+    
+      <button type="submit" [disabled]="contenidoForm.invalid">Crear sección</button>
+    </form>
+   
+    <form #contenidoForm="ngForm" (ngSubmit)="guardar(contenidoForm)">
+        <div class="form-group">
+            <label for="titulo">Título del Contenido:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" [(ngModel)]="blog.titulo" required />
+        </div>
+
+        <quill-editor #editor [(ngModel)]="htmlContent" [modules]="modulesQuill" (onContentChanged)="Eventos($event)" (onEditorCreated)="onEditorCreated($event)" name="editorContent">
+        </quill-editor>
+
+        <button type="submit" class="btn btn-primary">Guardar y Generar PDF</button>
+    </form>
+</div> -->
+<div class="contenido-container">
+  <h1>{{ blog.titulo }}</h1>
+
+  <!-- Formulario reactivo para crear secciones -->
+  <form [formGroup]="cursoForm" (ngSubmit)="crearSeccion()">
+    <label for="numeroSeccion">Numero de la sección:</label>
+    <input id="numerSeccion" type="number" formControlName="numeroSeccion" placeholder="Ingrese el numero de la sección" required/>
+    <br>
+    <label for="nombreSeccion">Nombre de la sección:</label>
+    <input id="nombreSeccion" type="text" formControlName="nombreSeccion" placeholder="Ingrese el nombre de la sección" required/>
+    <br>
+    <label for="curso">Selecciona un curso:</label>
+    <select formControlName="opcionSeleccionada" id="curso" required>
+      <option *ngFor="let curso of cursos" [ngValue]="curso">{{ curso.nombre }}</option>
+    </select>
+
+    <h1>-------------------------------------------------------------------------------</h1>
+    <br>
+    <label for="numeroSubSeccion">Numero de la Sub Sección:</label>
+    <input id="numeroSubSeccion" type="number" formControlName="numeroSubSeccion" placeholder="Ingrese el numero de la Sub Sección" required/>
+    <br>
+    <label for="nombreSubSeccion">Nombre de la Sub Sección:</label>
+    <input id="nombreSubSeccion" type="text" formControlName="nombreSubSeccion" placeholder="Ingrese el nombre de la sección" required/>
+    <br>
+    <button type="submit" [disabled]="cursoForm.invalid">Crear sección</button>
+  </form>
+
+  <!-- Formulario reactivo para el contenido -->
+  <form [formGroup]="editorForm" (ngSubmit)="guardar()">
+    <div class="form-group">
+      <label for="titulo">Nombre del Curso:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="titulo"
+        formControlName="titulo"
+        required
+      />
+    </div>
+
+    <quill-editor
+      #editor
+      formControlName="editorContent"
+      [modules]="modulesQuill"
+      (onContentChanged)="Eventos($event)"
+      (onEditorCreated)="onEditorCreated($event)">
+    </quill-editor>
+<br>
+    <button type="submit" class="btn btn-primary" [disabled]="editorForm.invalid">Guardar y Generar PDF</button>
+  </form>
+</div>
+<button (click)="PDF()" class="btn btn-primary">PDF</button>
+
+
+ <!-- Barra Lateral -->
+ <!-- <div class="sidebar">
+  <h2>Cursos</h2>
+  <ul>
+    <li><a href="#">Curso 1</a></li>
+    <li><a href="#">Curso 2</a></li>
+    <li><a href="#">Curso 3</a></li>
+  </ul>
+</div> -->
+
+<div>
+  <label for="metaInput">Metas del curso:</label>
+  <input
+    type="text"
+    id="metaInput"
+    placeholder="Escribe una meta..."
+    [(ngModel)]="nuevaMeta"
+  />
+  <button (click)="agregarMeta()">Añadir Meta</button>
+</div>
+<ul>
+  <li *ngFor="let meta of metas">{{ meta }}</li>
+</ul>
+
+<!-- Contenido Principal -->
+<div class="main-content">
+  <h1>Gestión de Curso</h1>
+  <form>
+    <div class="form-group">
+      <label for="course-title">Título del Curso:</label>
+      <input type="text" id="course-title" placeholder="Ingrese el título del curso">
+    </div>
+    <div class="form-group">
+      <label for="course-description">Descripción:</label>
+      <textarea id="course-description" rows="4" placeholder="Ingrese una descripción del curso"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="course-goals">Metas del Curso:</label>
+      <textarea id="course-goals" rows="3" placeholder="Ingrese las metas del curso"></textarea>
+    </div>
+    <button type="button">Guardar Curso</button>
+  </form>
+
+  <h2>Secciones</h2>
+  <div class="section">
+    <div class="section-header">Sección 1</div>
+    <div class="subsection">Subsección 1.1</div>
+    <div class="subsection">Subsección 1.2</div>
+    <div class="action-buttons">
+      <button>Agregar Subsección</button>
+      <button>Editar Sección</button>
+      <button>Eliminar Sección</button>
+    </div>
+  </div>
+
+  <button type="button">Agregar Sección</button>
+</div>
+
+<!-- <div class="contenido-form-container">
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <mat-form-field appearance="fill">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="titulo" required />
+      <mat-error *ngIf="formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched">Título requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion" required></textarea>
+      <mat-error *ngIf="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched">Descripción requerida</mat-error>
+    </mat-form-field>
+
+    <div formArrayName="secciones">
+      <div *ngFor="let seccion of obtenerSecciones.controls; let seccionIndex = index" [formGroupName]="seccionIndex" class="seccion">
+        <mat-card class="seccion-card">
+          <mat-card-title>Sección {{ seccionIndex + 1 }}</mat-card-title>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre de la Sección</mat-label>
+            <input matInput formControlName="nombreSeccion" />
+          </mat-form-field>
+
+          <button mat-raised-button color="warn" (click)="quitarSeccion(seccionIndex)">Eliminar Sección</button>
+
+          <div formArrayName="subsecciones">
+            <div *ngFor="let subSeccion of getSubsecciones(seccion).controls; let subSeccionIndex = index">
+              <mat-form-field appearance="fill">
+                <mat-label>Nombre de la SubSección</mat-label>
+                <input matInput formControlName="nombreSubSeccion" required />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Contenido de la SubSección</mat-label>
+                <textarea matInput formControlName="contenidoTexto" required></textarea>
+              </mat-form-field>
+
+              <button mat-button color="warn" (click)="quitarSubSeccion(seccionIndex, subSeccionIndex)">Eliminar SubSección</button>
+            </div>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="agregarSubSeccion(seccionIndex)">Agregar SubSección</button>
+        </mat-card>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="agregarSeccion()">Agregar Sección</button>
+
+    <div class="editor-container">
+      <quill-editor [modules]="modulesQuill" (onContentChanged)="Eventos($event)" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
+    </div>
+
+    <button mat-raised-button color="accent" type="submit">Guardar</button>
+    <button mat-raised-button color="primary" (click)="generarPDF()">Generar PDF</button>
+    <button mat-raised-button color="warn" (click)="cancelarOperacion()">Cancelar</button>
+  </form>
+</div> -->
+<!-- 2 -->
+<!-- <div class="contenido-form-container">
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario">
+    
+    <mat-form-field appearance="fill" class="campo-formulario">
+      <mat-label>Título Curso</mat-label>
+      <input matInput formControlName="titulo" required />
+      <mat-error *ngIf="formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched">
+        Título requerido
+      </mat-error>
+    </mat-form-field>
+
+   
+    <button mat-raised-button color="primary" class="boton-pequeno" (click)="agregarSeccion()" type="button">
+      Agregar Sección
+    </button>
+
+    
+    <div formArrayName="secciones">
+      <div *ngFor="let seccion of obtenerSecciones.controls; let seccionIndex = index" [formGroupName]="seccionIndex" class="seccion">
+        <mat-card class="seccion-card">
+          <mat-card-title>Sección {{ seccionIndex + 1 }}</mat-card-title>
+
+          <mat-form-field appearance="fill" class="campo-formulario">
+            <mat-label>Nombre de la Sección</mat-label>
+            <input matInput formControlName="nombreSeccion" />
+          </mat-form-field>
+
+          
+          <button mat-raised-button color="warn" class="boton-pequeno" (click)="quitarSeccion(seccionIndex)">
+            Eliminar Sección
+          </button>
+
+          
+          <div formArrayName="subsecciones" class="subseccion-container">
+            <div *ngFor="let subSeccion of getSubsecciones(seccion).controls; let subSeccionIndex = index" class="subseccion" [formGroupName]="subSeccionIndex">
+              <mat-card-title class="subseccion-titulo">Subsección {{ seccionIndex + 1 }}.{{ subSeccionIndex + 1 }}</mat-card-title>
+
+              <mat-form-field appearance="fill" class="campo-formulario">
+                <mat-label>Nombre de la Subsección</mat-label>
+                <input matInput formControlName="nombreSubSeccion" required />
+              </mat-form-field>
+
+              <div class="editor-container">
+                <quill-editor formControlName="contenidoTexto" [modules]="modulesQuill" (onContentChanged)="Eventos($event)" (onEditorCreated)="onEditorCreated($event)"></quill-editor>
+              </div>
+
+              
+              <button mat-button color="warn" class="boton-pequeno" (click)="quitarSubSeccion(seccionIndex, subSeccionIndex)">
+                Eliminar Subsección
+              </button>
+            </div>
+          </div>
+
+          
+          <button mat-raised-button color="primary" class="boton-pequeno" (click)="agregarSubSeccion(seccionIndex)">
+            Agregar Subsección
+          </button>
+        </mat-card>
+      </div>
+    </div>
+
+    
+    <div class="botonera">
+      <button mat-raised-button color="accent" class="boton-pequeno" type="submit">Guardar</button>
+      <button mat-raised-button color="warn" class="boton-pequeno" (click)="cancelarOperacion()">Cancelar</button>
+    </div>
+  </form>
+
+
+  <div class="boton-generar-pdf-container">
+    <button mat-raised-button color="primary" class="boton-pequeno" (click)="generarPDF()">
+      Generar PDF
+    </button>
+  </div>
+</div> -->
+
+<!-- 3 -->
+<!-- <mat-dialog-content>
+  <form [formGroup]="formulario">
+    <mat-form-field>
+      <input matInput formControlName="titulo" placeholder="Título">
+    </mat-form-field>
+    <button mat-button type="button" (click)="agregarSeccion()">Agregar Sección</button>
+    <div formArrayName="secciones">
+      <div *ngFor="let seccion of obtenerSecciones().controls; let seccionIndex = index" [formGroupName]="seccionIndex">
+        <h3>Sección {{ seccionIndex + 1 }}</h3>
+        <mat-form-field>
+          <input matInput formControlName="nombreSeccion" placeholder="Nombre Sección">
+        </mat-form-field>
+        <button mat-button type="button" (click)="agregarSubSeccion(seccionIndex)">Agregar Subsección</button>
+        <button mat-button type="button" color="warn" (click)="quitarSeccion(seccionIndex)">Eliminar Sección</button>
+        <div formArrayName="subsecciones">
+          <div *ngFor="let subseccion of obtenerSubsecciones(seccionIndex).controls; let subseccionIndex = index" [formGroupName]="subseccionIndex">
+            <h4>Subsección {{ seccionIndex + 1 }}.{{ subseccionIndex + 1 }}</h4>
+            <mat-form-field>
+              <input matInput formControlName="nombreSubseccion" placeholder="Nombre Subsección">
+            </mat-form-field>
+            <div>
+              <quill-editor #editor 
+                            formControlName="contenidoSubSeccion" 
+                            [modules]="modulesQuill"
+                            (onContentChanged)="Eventos($event)" 
+                            (onEditorCreated)="onEditorCreated($event)">
+              </quill-editor>
+            </div>
+            <button mat-button type="button" color="warn" (click)="quitarSubSeccion(seccionIndex, subseccionIndex)">Eliminar Subsección</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pagination-controls">
+      <button mat-button type="button" (click)="paginaAnterior()" [disabled]="currentPage === 0">Anterior</button>
+      <span>Página {{currentPage + 1}} de {{totalPaginas}}</span>
+      <button mat-button type="button" (click)="paginaSiguiente()" [disabled]="currentPage >= totalPaginas - 1">Siguiente</button>
+    </div>
+  </form>
+</mat-dialog-content> -->
+<!-- 4 -->
+<!-- <div class="contenido-formulario">
+  <form [formGroup]="formulario" (ngSubmit)="generarPDF()">
+    <mat-form-field>
+      <input matInput formControlName="titulo" placeholder="Título del contenido" />
+      <mat-error *ngIf="formulario.get('titulo')?.hasError('required')">
+        El título es obligatorio.
+      </mat-error>
+    </mat-form-field>
+    <div formArrayName="secciones">
+      <div *ngFor="let seccion of obtenerSeccionesPaginated(); let i = index">
+        <div [formGroupName]="i" class="seccion">
+          <h3>Sección {{ i + 1 }}</h3> 
+          <mat-form-field>
+            <input matInput formControlName="nombreSeccion" placeholder="Nombre de la sección" />
+          </mat-form-field>
+          <div formArrayName="subsecciones">
+            <div *ngFor="let subseccion of obtenerSubseccionesPaginated(i); let j = index">
+              <div [formGroupName]="j" class="subseccion">
+                <h4>Subsección {{ i + 1 }}.{{ j + 1 }}</h4> 
+                <mat-form-field>
+                  <input matInput formControlName="nombreSubseccion" placeholder="Nombre de la subsección" />
+                </mat-form-field>
+                <div>
+                  <quill-editor #editor 
+                                formControlName="contenidoSubSeccion" 
+                                [modules]="modulesQuill"
+                                (onContentChanged)="Eventos($event)"
+                                (onEditorCreated)="onEditorCreated($event)">
+                  </quill-editor>
+                </div>
+              </div>
+            </div>
+            <button mat-button type="button" (click)="agregarSubSeccion(i)">Agregar Subsección</button>
+          </div>
+        </div>
+      </div>
+      <button mat-button type="button" (click)="agregarSeccion()">Agregar Sección</button>
+    </div>
+    <button mat-raised-button color="primary" type="submit" [disabled]="formulario.invalid">Generar PDF</button>
+  </form>
+  <div class="paginacion">
+    <button mat-button (click)="paginaAnteriorSecciones()" [disabled]="paginaActual === 0">Anterior</button>
+   <button mat-button 
+   (click)="paginaSiguienteSecciones()" 
+   [disabled]="!formulario.get('secciones')?.value || (paginaActual + 1) * itemsPorPagina >= (formulario.get('secciones')?.value.length || 0)">Siguiente</button>
+  </div>
+</div> -->
+
+<!-- <div *ngIf="currentSection">
+  <h2>{{ currentSection.nombreSeccion }}</h2>
+  <div *ngIf="currentSubSection">
+    <h3>{{ currentSubSection.nombreSubSeccion }}</h3>
+    <p>{{ currentSubSection.contenidoTexto }}</p>
+  </div>
+  <button (click)="previousSubSection()" [disabled]="subSectionIndex === 0">Anterior</button>
+  <button (click)="nextSubSection()" [disabled]="subSectionIndex === currentSection.listaSubSeccion.length - 1">Siguiente</button>
+</div> -->
+<!-- <div *ngIf="currentSection">
+  <h2>{{ currentSection.nombreSeccion }}</h2>
+  <div *ngIf="currentSubSection">
+    <h3>{{ currentSubSection.nombreSubSeccion }}</h3>
+    <p>{{ currentSubSection.contenidoTexto }}</p>
+  </div>
+  <button (click)="previousSubSection()" [disabled]="subSectionIndex === 0">Anterior Subsección</button>
+  <button (click)="nextSubSection()" [disabled]="subSectionIndex === currentSection.listaSubSeccion.length - 1">Siguiente Subsección</button>
+  <hr />
+  <button (click)="previousSection()" [disabled]="sectionIndex === 0">Anterior Sección</button>
+  <button (click)="nextSection()" [disabled]="sectionIndex === sections.length - 1">Siguiente Sección</button>
+</div> -->
+
+<!-- 5 -->
+<!-- <div class="contenido-formulario">
+  <form [formGroup]="formulario" (ngSubmit)="generarPDF()">
+    <mat-form-field>
+      <input matInput formControlName="titulo" placeholder="Título del contenido" />
+      <mat-error *ngIf="formulario.get('titulo')?.hasError('required')">El título es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <div class="paginacion">
+      <button mat-button (click)="anteriorPagina()" [disabled]="paginaActual === 0">Página Anterior</button>
+      <button mat-button (click)="siguientePagina()" [disabled]="paginaActual === totalPaginas - 1">Página Siguiente</button>
+    </div>
+    <div formArrayName="secciones">
+      <div *ngFor="let seccion of obtenerSeccionesPaginated(); let i = index">
+        <div [formGroupName]="i" class="seccion">
+          <h3>Sección {{ i + 1 }}</h3>
+          <mat-form-field>
+            <input matInput formControlName="nombreSeccion" placeholder="Nombre de la sección" />
+          </mat-form-field>
+          <div formArrayName="subsecciones">
+            <div *ngFor="let subseccion of obtenerSubseccionesPaginated(i); let j = index">
+              <div [formGroupName]="j" class="subseccion">
+                <h4>Subsección {{ i + 1 }}.{{ j + 1 }}</h4>
+                <mat-form-field>
+                  <input matInput formControlName="nombreSubseccion" placeholder="Nombre de la subsección" />
+                </mat-form-field>
+                <quill-editor formControlName="contenidoSubSeccion"></quill-editor>
+                <button mat-button color="warn" (click)="quitarSubseccion(i, j)">Quitar subsección</button>
+              </div>
+            </div>
+          </div>
+          <button mat-button color="primary" (click)="agregarSubSeccion(i)">Añadir subsección</button>
+          <button mat-button color="warn" (click)="quitarSeccion(i)">Quitar sección</button>
+        </div>
+      </div>
+    </div>
+    <button mat-button color="primary" (click)="agregarSeccion()">Añadir sección</button>
+    <button mat-button type="submit">Generar PDF</button>
+  </form>
+</div> -->
+
+<!-- 6 -->
+<!-- <div *ngIf="contenidoForm">
+  <form [formGroup]="contenidoForm" (ngSubmit)="onSubmit()">
+    <div formArrayName="sections">
+      <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i">
+        <div>
+          <label for="nombreSeccion">Nombre de Sección:</label>
+          <input id="nombreSeccion" formControlName="nombreSeccion" [attr.disabled]="true" />
+        </div>
+        <div formArrayName="listaSubSeccion">
+          <div *ngIf="subSectionIndex < getSubsections(i).length" [formGroupName]="subSectionIndex">
+            <div>
+              <label for="nombreSubSeccion">Nombre de Subsección:</label>
+              <input id="nombreSubSeccion" formControlName="nombreSubSeccion" [attr.disabled]="true" />
+            </div>
+          </div>
+        </div>
+        <button type="button" (click)="addSubsection()">Agregar Subsección</button>
+      </div>
+    </div>
+    <button type="button" (click)="addSection()">Agregar Sección</button>
+  </form>
+  <hr />
+  <div *ngIf="sections.length > 0">
+    <h2 *ngIf="sections.at(sectionIndex)"> {{ sections.at(sectionIndex).get('nombreSeccion')?.value }} </h2>
+    <div *ngIf="subSectionIndex < getSubsections(sectionIndex).length">
+  </div>
+    <button (click)="previousSubSection()" [disabled]="subSectionIndex === 0">Anterior Subsección</button>
+    <button (click)="nextSubSection()" [disabled]="subSectionIndex === getSubsections(sectionIndex).length - 1">Siguiente Subsección</button>
+    <hr />
+    <button (click)="previousSection()" [disabled]="sectionIndex === 0">Anterior Sección</button>
+    <button (click)="nextSection()" [disabled]="sectionIndex === sections.length - 1">Siguiente Sección</button>
+  </div>
+</div> -->
+<!-- 7 -->
+<!-- <form [formGroup]="seccionForm" (ngSubmit)="agregarSeccion()">
+  <div>
+    <label for="numeroSeccion">Número de Sección: <span>{{ secciones.length + 1 }}</span></label>
+  </div>
+  <div>
+    <label for="nombreSeccion">Nombre de Sección:</label>
+    <input id="nombreSeccion" formControlName="nombreSeccion" type="text">
+  </div>
+  
+  <div formArrayName="listaSubSeccion">
+    <div *ngFor="let sub of listaSubSeccion.controls; let i = index" [formGroupName]="i">
+      <label for="sub-num-{{ i }}">Número de Subsección: {{ i + 1 }}</label>
+      <label for="sub-nombre-{{ i }}">Nombre de Subsección:</label>
+      <input id="sub-nombre-{{ i }}" formControlName="nombreSubSeccion" type="text">
+    </div>
+    <button type="button" (click)="agregarSubseccion()">Agregar Subsección</button>
+  </div>
+  <button type="submit">Agregar Sección</button>
+</form>
+ -->
