@@ -1,17 +1,9 @@
 [build]
-  base    = "front"
+  base = "front"
   command = "ng build --configuration production"
   publish = "front/dist/plantilla1"
 
-[build.environment]
-  NODE_VERSION = "20"
-
 [[redirects]]
-  from   = "/*"
-  to     = "/index.html"
+  from = "/*"
+  to = "/index.html"
   status = 200
-
-[[plugins]]
-  package = "@netlify/angular-runtime"
-  [plugins.inputs]
-    enabled = false
