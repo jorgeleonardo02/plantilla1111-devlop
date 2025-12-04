@@ -1,9 +1,9 @@
 [build]
-  base = "front"
-  command = "ng build --configuration production"
-  publish = "front/dist/plantilla1"
+base = "front"
+command = "ng build --configuration production"
+publish = "dist/plantilla1"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200
